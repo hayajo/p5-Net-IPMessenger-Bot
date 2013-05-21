@@ -99,9 +99,6 @@ Net::IPMessenger::Bot - Blah blah blah
 
 =head1 SYNOPSIS
 
-  use Net::IPMessenger::Bot;
-
-
   #!/usr/bin/env perl
   use strict;
   use warnings;
