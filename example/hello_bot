@@ -1,0 +1,31 @@
+#!/usr/bin/env perl
+use strict;
+use utf8;
+use Net::IPMessenger::Bot;
+use Sys::Hostname ();
+
+my $bot = Net::IPMessenger::Bot->new(
+    config => {
+        NickName  => 'ipmsg_bot',
+        GroupName => 'bot',
+        UserName  => __PACKAGE__,
+        HostName  => Sys::Hostname::hostname(),
+    },
+    # on => sub {
+        # my $client = shift;
+        # $client->update_nickname;
+        # "Hello " . $client->nick;
+    # },
+    on => [
+        qr/hello/ => sub {
+            my $client = shift;
+            "Hello " . $client->nickname;
+        },
+        qr/goodbye/ => sub {
+            my $client = shift;
+            "Goodbye " . $client->nickname;
+        },
+    ],
+);
+
+$bot->start;

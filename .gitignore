@@ -1,0 +1,6 @@
+/Net-IPMessenger-Bot-*
+/.build
+/_build*
+/Build
+MYMETA.*
+!META.json
