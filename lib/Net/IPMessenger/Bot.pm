@@ -101,6 +101,29 @@ Net::IPMessenger::Bot - Blah blah blah
 
   use Net::IPMessenger::Bot;
 
+
+  #!/usr/bin/env perl
+  use strict;
+  use warnings;
+
+  use Net::IPMessenger::Bot;
+  use Sys::Hostname ();
+
+  my $bot = Net::IPMessenger::Bot->new(
+      config => {
+          NickName  => 'ipmsg_bot',
+          GroupName => 'bot',
+          UserName  => __PACKAGE__,
+          HostName  => Sys::Hostname::hostname(),
+      },
+      on => sub {
+          my $client = shift;
+          "Hello " . $client->nickname;
+      },
+  );
+
+  $bot->start;
+
 =head1 DESCRIPTION
 
 Net::IPMessenger::Bot is
