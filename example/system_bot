@@ -13,7 +13,7 @@ my $bot = Net::IPMessenger::Bot->new(
     },
     on => [
         qr/top/ => sub { `top -b -n 1` },
-        qr/ps/  => sub { `ps auxf` },
+        qr/ps/  => sub { `ps aux` },
     ],
 );
 
