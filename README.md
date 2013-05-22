@@ -12,7 +12,7 @@ Net::IPMessenger::Bot - Blah blah blah
     use Sys::Hostname ();
 
     my $bot = Net::IPMessenger::Bot->new(
-        config => {
+        configure => {
             NickName  => 'ipmsg_bot',
             GroupName => 'bot',
             UserName  => __PACKAGE__,
