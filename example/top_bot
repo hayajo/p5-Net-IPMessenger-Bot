@@ -11,19 +11,9 @@ my $bot = Net::IPMessenger::Bot->new(
         UserName  => __PACKAGE__,
         HostName  => Sys::Hostname::hostname(),
     },
-    # on => sub {
-        # my $user = shift;
-        # "Hello " . $user->nickname;
-    # },
     on => [
-        qr/hello/ => sub {
-            my $user = shift;
-            "Hello " . $user->nickname;
-        },
-        qr/goodbye/ => sub {
-            my $user = shift;
-            "Goodbye " . $user->nickname;
-        },
+        qr/top/ => sub { `top -b -n 1` },
+        qr/ps/  => sub { `ps auxf` },
     ],
 );
 

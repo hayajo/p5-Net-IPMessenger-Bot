@@ -1,21 +1,20 @@
 package Net::IPMessenger::Bot;
 
 use strict;
+use warnings;
 use 5.008_005;
 our $VERSION = '0.01';
 
 use parent qw/Net::IPMessenger/;
+use Net::IPMessenger::Bot::EventHandler;
 
 sub new {
     my ( $class, %args ) = @_;
 
-    my $config = $args{config} || {};
-    my $self = $class->SUPER::new(%$config);
+    my $handler = Net::IPMessenger::Bot::EventHandler->new( handler => $args{on} );
 
-    my $handler = $args{on};
-    my $ev = Net::IPMessenger::Bot::EvenHandler->new( handler => $handler );
-
-    $self->add_event_handler($ev);
+    my $self = $class->SUPER::new( %{ $args{configure} || {} } );
+    $self->add_event_handler($handler);
 
     return $self;
 }
@@ -36,58 +35,6 @@ sub join {
     );
 }
 
-{
-    package Net::IPMessenger::Bot::EvenHandler;
-
-    use parent qw/Net::IPMessenger::RecvEventHandler/;
-    use Encode qw();
-
-    sub new {
-        my ($class, %args) = @_;
-
-        $args{handler} = [ qr// => $args{handler} ]
-            unless ( ref $args{handler} eq 'ARRAY' );
-
-        my $self = shift->SUPER::new();
-        $self->{handler} = $args{handler};
-
-        return $self;
-    }
-
-    sub handle {
-        my ( $self, $client ) = @_;
-
-        return unless ( $self->{handler} );
-
-        my $msg = Encode::decode( 'shiftjis', $client->get_message );
-        my $res;
-
-        while ( my ( $regex, $handler ) = splice( @{ $self->{handler} }, 0, 2 ) ) {
-            if ( $msg =~ $regex ) {
-                $res = $handler->($client);
-                last;
-            }
-        }
-
-        return $res;
-    }
-
-    sub SENDMSG {
-        my ($self, $ipmsg, $client ) = @_;
-
-        my $res = $self->handle($client);
-        $ipmsg->send(
-            {
-                command  => $ipmsg->messagecommand('SENDMSG'),
-                option   => $res,
-                peeraddr => $client->peeraddr,
-                peerport => $client->peerport,
-            }
-        ) if ( defined $res );
-    }
-}
-
-
 1;
 __END__
 
@@ -107,7 +54,7 @@ Net::IPMessenger::Bot - Blah blah blah
   use Sys::Hostname ();
 
   my $bot = Net::IPMessenger::Bot->new(
-      config => {
+      configure => {
           NickName  => 'ipmsg_bot',
           GroupName => 'bot',
           UserName  => __PACKAGE__,
