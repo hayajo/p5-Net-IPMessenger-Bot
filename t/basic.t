@@ -1,7 +1,7 @@
 use strict;
 use Test::More;
 use Net::EmptyPort qw/empty_port check_port/;
-use Sys::Hostname qw/hostname/;
+use Sys::Hostname;
 
 use Net::IPMessenger::Bot;
 
