@@ -102,7 +102,7 @@ sub start_bot {
             UserName => 'bot',
             HostName => hostname(),
         },
-        on => $handler,
+        on_message => $handler,
     );
 
     $bot->start();

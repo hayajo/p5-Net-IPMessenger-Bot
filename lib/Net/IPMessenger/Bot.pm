@@ -12,7 +12,9 @@ sub new {
     my ( $class, %args ) = @_;
 
     my $ipmsg   = Net::IPMessenger->new( %{ $args{configure} } );
-    my $handler = Net::IPMessenger::Bot::EventHandler->new( handler => $args{on} );
+    my $handler = Net::IPMessenger::Bot::EventHandler->new(
+        handler => $args{on_message},
+    );
     $ipmsg->add_event_handler($handler);
 
     my $self = bless { ipmsg => $ipmsg }, $class;
@@ -79,7 +81,7 @@ Net::IPMessenger::Bot - IPMessenger-Bot building framework
           GroupName => 'bot',
           HostName  => hostname(),
       },
-      on => sub {
+      on_message => sub {
           my $user = shift;
           "Hello " . $user->nickname;
       },
@@ -104,7 +106,7 @@ L<Net::IPMessenger::Bot> implements following methods.
           GroupName => 'bot',
           HostName  => hostname(),
       },
-      on => sub {
+      on_message => sub {
           my $user = shift;
           "Hello " . $user->nickname;
       },
@@ -125,16 +127,16 @@ Construct a new L<Net::IPMessenger::Bot>.
 
 options for L<Net::IPMessenger>#new.
 
-=item on
+=item on_message
 
-  on => sub {
+  on_message => sub {
       my $user = shift;
       "Hello " . $user->nickname;
   }
 
 or
 
-  on => [
+  on_message => [
       qr/hello/ => sub {
         my $user = shift;
         "Hello " . $user->nickname;

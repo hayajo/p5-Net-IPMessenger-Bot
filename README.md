@@ -18,7 +18,7 @@ Net::IPMessenger::Bot - IPMessenger-Bot building framework
             GroupName => 'bot',
             HostName  => hostname(),
         },
-        on => sub {
+        on_message => sub {
             my $user = shift;
             "Hello " . $user->nickname;
         },
@@ -43,7 +43,7 @@ Net::IPMessenger::Bot is an IPMessenger-Bot building framework.
             GroupName => 'bot',
             HostName  => hostname(),
         },
-        on => sub {
+        on_message => sub {
             my $user = shift;
             "Hello " . $user->nickname;
         },
@@ -62,16 +62,16 @@ Construct a new [Net::IPMessenger::Bot](http://search.cpan.org/perldoc?Net::IPMe
 
     options for [Net::IPMessenger](http://search.cpan.org/perldoc?Net::IPMessenger)\#new.
 
-- on
+- on\_message
 
-        on => sub {
+        on_message => sub {
             my $user = shift;
             "Hello " . $user->nickname;
         }
 
     or
 
-        on => [
+        on_message => [
             qr/hello/ => sub {
               my $user = shift;
               "Hello " . $user->nickname;

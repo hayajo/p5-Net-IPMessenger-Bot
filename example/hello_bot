@@ -11,11 +11,11 @@ my $bot = Net::IPMessenger::Bot->new(
         UserName  => __PACKAGE__,
         HostName  => Sys::Hostname::hostname(),
     },
-    # on => sub {
+    # on_message => sub {
         # my $user = shift;
         # "Hello " . $user->nickname;
     # },
-    on => [
+    on_message => [
         qr/hello/ => sub {
             my $user = shift;
             "Hello " . $user->nickname;
