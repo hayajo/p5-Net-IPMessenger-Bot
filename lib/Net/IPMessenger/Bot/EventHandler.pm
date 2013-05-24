@@ -27,7 +27,10 @@ sub handle {
     my $msg = Encode::decode( 'shiftjis', $user->get_message );
     my $res;
 
-    while ( my ( $regex, $handler ) = splice( @{ $self->{handler} }, 0, 2 ) ) {
+    for ( my $i = 0; $i < @{ $self->{handler} }; $i += 2 ) {
+        my $regex   = $self->{handler}->[$i];
+        my $handler = $self->{handler}->[ $i + 1 ];
+
         if ( $msg =~ $regex ) {
             $res = $handler->($user);
             last;
