@@ -61,7 +61,7 @@ __END__
 
 =head1 NAME
 
-Net::IPMessenger::Bot - Blah blah blah
+Net::IPMessenger::Bot - IPMessenger-Bot building framework
 
 =head1 SYNOPSIS
 
@@ -70,18 +70,18 @@ Net::IPMessenger::Bot - Blah blah blah
   use warnings;
 
   use Net::IPMessenger::Bot;
-  use Sys::Hostname ();
+  use Sys::Hostname;
 
   my $bot = Net::IPMessenger::Bot->new(
       configure => {
+          UserName  => 'ipmsg_bot',
           NickName  => 'ipmsg_bot',
           GroupName => 'bot',
-          UserName  => __PACKAGE__,
-          HostName  => Sys::Hostname::hostname(),
+          HostName  => hostname(),
       },
       on => sub {
-          my $client = shift;
-          "Hello " . $client->nickname;
+          my $user = shift;
+          "Hello " . $user->nickname;
       },
   );
 
@@ -89,7 +89,71 @@ Net::IPMessenger::Bot - Blah blah blah
 
 =head1 DESCRIPTION
 
-Net::IPMessenger::Bot is
+Net::IPMessenger::Bot is an IPMessenger-Bot building framework.
+
+=head1 METHODS
+
+L<Net::IPMessenger::Bot> implements following methods.
+
+=head2 new
+
+  my $bot = Net::IPMessenger::Bot->new(
+      configure => {
+          UserName  => 'ipmsg_bot',
+          NickName  => 'ipmsg_bot',
+          GroupName => 'bot',
+          HostName  => hostname(),
+      },
+      on => sub {
+          my $user = shift;
+          "Hello " . $user->nickname;
+      },
+  );
+
+Construct a new L<Net::IPMessenger::Bot>.
+
+=over 2
+
+=item configure
+
+  configure => {
+      UserName  => 'ipmsg_bot',
+      NickName  => 'ipmsg_bot',
+      GroupName => 'bot',
+      HostName  => hostname(),
+  },
+
+options for L<Net::IPMessenger>#new.
+
+=item on
+
+  on => sub {
+      my $user = shift;
+      "Hello " . $user->nickname;
+  }
+
+or
+
+  on => [
+      qr/hello/ => sub {
+        my $user = shift;
+        "Hello " . $user->nickname;
+      },
+      qr/goodbye/ => sub {
+        my $user = shift;
+        "Goodbye " . $user->nickname;
+      },
+  }
+
+register callback.
+
+=back
+
+=head2 start
+
+  $bot->start;
+
+start bot.
 
 =head1 AUTHOR
 
@@ -105,5 +169,7 @@ This library is free software; you can redistribute it and/or modify
 it under the same terms as Perl itself.
 
 =head1 SEE ALSO
+
+L<Net::IPMessenger>
 
 =cut

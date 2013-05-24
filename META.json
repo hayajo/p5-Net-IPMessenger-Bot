@@ -1,5 +1,5 @@
 {
-   "abstract" : "Blah blah blah",
+   "abstract" : "IPMessenger-Bot building framework",
    "author" : [
       "hayajo <hayajo@cpan.org>"
    ],
@@ -42,6 +42,7 @@
       },
       "test" : {
          "requires" : {
+            "Net::EmptyPort" : "0",
             "Test::More" : "0.88"
          }
       }
