@@ -5,4 +5,5 @@ requires 'Net::IPMessenger', '>= 0.14';
 
 on test => sub {
     requires 'Test::More', '0.88';
+    requires 'Net::EmptyPort';
 };

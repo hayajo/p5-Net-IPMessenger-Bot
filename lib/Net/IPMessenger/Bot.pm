@@ -5,16 +5,18 @@ use warnings;
 use 5.008_005;
 our $VERSION = '0.01';
 
-use parent qw/Net::IPMessenger/;
+use Net::IPMessenger;
 use Net::IPMessenger::Bot::EventHandler;
 
 sub new {
     my ( $class, %args ) = @_;
 
+    my $ipmsg   = Net::IPMessenger->new( %{ $args{configure} } );
     my $handler = Net::IPMessenger::Bot::EventHandler->new( handler => $args{on} );
+    $ipmsg->add_event_handler($handler);
 
-    my $self = $class->SUPER::new( %{ $args{configure} || {} } );
-    $self->add_event_handler($handler);
+    my $self = bless { ipmsg => $ipmsg }, $class;
+    $self->_set_signal_handlers;
 
     return $self;
 }
@@ -22,18 +24,35 @@ sub new {
 sub start {
     my $self = shift;
     $self->join();
-    while ( $self->recv() ) { }
+    while ( $self->{ipmsg}->recv() ) { }
 }
 
 sub join {
     my $self = shift;
-    $self->send(
+
+    my $cmd = $self->{ipmsg}->messagecommand('BR_ENTRY')->set_broadcast;
+    $self->{ipmsg}->send(
         {
-            command => $self->messagecommand('BR_ENTRY')->set_broadcast,
-            option  => $self->my_info,
+            command => $cmd,
+            option  => $self->{ipmsg}->my_info,
         }
     );
 }
+
+sub _set_signal_handlers {
+    my $self = shift;
+    $SIG{INT} = $SIG{TERM} = sub { $self->sighandle_INT() };
+}
+
+sub sighandle_INT {
+    my $self = shift;
+
+    my $cmd = $self->{ipmsg}->messagecommand('BR_EXIT')->set_broadcast;
+    $self->{ipmsg}->send( { command => $cmd } );
+
+    exit;
+}
+
 
 1;
 __END__
