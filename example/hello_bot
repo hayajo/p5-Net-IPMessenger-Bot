@@ -6,9 +6,9 @@ use Sys::Hostname ();
 
 my $bot = Net::IPMessenger::Bot->new(
     configure => {
-        NickName  => 'ipmsg_bot',
+        NickName  => 'hello_bot',
         GroupName => 'bot',
-        UserName  => __PACKAGE__,
+        UserName  => 'hello_bot',
         HostName  => Sys::Hostname::hostname(),
     },
     # on_message => sub {

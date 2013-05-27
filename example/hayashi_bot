@@ -3,18 +3,19 @@ use strict;
 use utf8;
 use Net::IPMessenger::Bot;
 use Sys::Hostname ();
+use Encode;
 
 my $bot = Net::IPMessenger::Bot->new(
     configure => {
-        NickName  => 'system_bot',
+        NickName  => 'hayashi_bot',
         GroupName => 'bot',
-        UserName  => 'system_bot',
+        UserName  => 'hayashi_bot',
         HostName  => Sys::Hostname::hostname(),
     },
     on_message => [
-        qr/top/ => sub { `top -b -n 1` },
-        qr/ps/  => sub { `ps aux` },
-        qr/df/  => sub { `df` },
+        qr/いつやるの?/ => sub {
+            "いまでしょ";
+        },
     ],
 );
 
