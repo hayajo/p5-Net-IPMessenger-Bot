@@ -53,7 +53,7 @@ sub SENDMSG {
             command  => $ipmsg->messagecommand('SENDMSG'),
             peeraddr => $user->peeraddr,
             peerport => $user->peerport,
-            option   => $res,
+            option   => Encode::encode( 'shiftjis', $res ),
         }
     ) if ( defined $res );
 }
