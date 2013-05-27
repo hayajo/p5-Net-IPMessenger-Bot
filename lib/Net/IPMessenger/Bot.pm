@@ -3,7 +3,7 @@ package Net::IPMessenger::Bot;
 use strict;
 use warnings;
 use 5.008_005;
-our $VERSION = '0.01';
+our $VERSION = '0.02';
 
 use Net::IPMessenger;
 use Net::IPMessenger::Bot::EventHandler;
