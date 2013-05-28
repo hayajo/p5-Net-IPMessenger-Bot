@@ -7,8 +7,7 @@ use Net::IPMessenger::Bot;
 
 subtest 'coderef' => sub {
     my $port = empty_port();
-
-    my $pid = start_bot(
+    my $bot  = generate_bot(
         port    => $port,
         handler => sub {
             my $user = shift;
@@ -17,24 +16,21 @@ subtest 'coderef' => sub {
     );
 
     my $user = generate_user();
-
     sendmsg(
         $user => 'hello',
         { peerport => $port },
     );
-    my $recv = $user->recv;
+    $bot->{ipmsg}->recv();
+
+    my $recv = $user->recv();
     ok $recv;
     my $cmd = $user->messagecommand( $recv->command );
     like $recv->get_message, qr/Hello user/;
-
-    kill 'INT', $pid;
-    wait();
 };
 
 subtest 'arreyref' => sub {
     my $port = empty_port();
-
-    my $pid = start_bot(
+    my $bot  = generate_bot(
         port    => $port,
         handler => [
             qr/hello/ => sub {
@@ -58,6 +54,8 @@ subtest 'arreyref' => sub {
         $user => 'hello',
         { peerport => $port },
     );
+    $bot->{ipmsg}->recv();
+
     my $recv = $user->recv;
     ok $recv;
     my $cmd = $user->messagecommand( $recv->command );
@@ -67,6 +65,8 @@ subtest 'arreyref' => sub {
         $user => 'goodbye',
         { peerport => $port },
     );
+    $bot->{ipmsg}->recv();
+
     my $recv = $user->recv;
     ok $recv;
     like $recv->get_message, qr/Goodbye user/;
@@ -75,27 +75,20 @@ subtest 'arreyref' => sub {
         $user => 'command',
         { peerport => $port },
     );
+    $bot->{ipmsg}->recv();
+
     my $recv = $user->recv;
     ok $recv;
     like $recv->get_message, qr/Unsupported Command: command/;
-
-    kill 'INT', $pid;
-    wait();
 };
 
-sub start_bot {
+sub generate_bot {
     my %args = @_;
 
     my $port    = $args{port}    or die;
     my $handler = $args{handler} or die;
 
-    # parent
-    if ( my $pid = fork ) {
-        while ( !check_port( $port, 'udp' ) ) { sleep 1 }
-        return $pid;
-    }
-
-    my $bot = Net::IPMessenger::Bot->new(
+    Net::IPMessenger::Bot->new(
         configure => {
             Port     => $port,
             NickName => 'bot',
@@ -104,8 +97,6 @@ sub start_bot {
         },
         on_message => $handler,
     );
-
-    $bot->start();
 }
 
 sub generate_user {
@@ -125,7 +116,7 @@ sub sendmsg {
     $ipmsg->send(
         {
             command  => $cmd,
-            option   => $message || '',
+            option   => $message            || '',
             peeraddr => $args->{'peeraddr'} || '127.0.0.1',
             peerport => $args->{'peerport'} || 2425,
         }
