@@ -37,6 +37,7 @@
       "runtime" : {
          "requires" : {
             "Net::IPMessenger" : "0.14",
+            "Term::ANSIColor" : "0",
             "perl" : "5.008005"
          }
       },
@@ -59,6 +60,6 @@
          "web" : "https://github.com/hayajo/p5-Net-IPMessenger-Bot"
       }
    },
-   "version" : "0.03"
+   "version" : "0.04"
 }
 

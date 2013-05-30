@@ -2,6 +2,10 @@ Revision history for Net-IPMessenger-Bot
 
 {{$NEXT}}
 
+0.04  2013-05-30 11:58:54 JST
+        - Improved to reply 'READMSG'
+        - Added Net::IPMessenger::Bot::EventHandler#debug
+
 0.03  2013-05-28 10:14:25 JST
         - Fixed a hang-bug in the test
 
