@@ -61,6 +61,7 @@ sub SENDMSG {
     $ipmsg->message([]); #  clear cached-messages
     $self->SUPER::SENDMSG($ipmsg, $user);
 
+    my $command = $ipmsg->messagecommand( $user->command );
     if ( $command->get_readcheck() ) {
         $ipmsg->send(
             {
