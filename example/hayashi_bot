@@ -11,6 +11,7 @@ my $bot = Net::IPMessenger::Bot->new(
         GroupName => 'bot',
         UserName  => 'hayashi_bot',
         HostName  => Sys::Hostname::hostname(),
+        Debug     => 1,
     },
     on_message => [
         qr/いつやるの?/ => sub {

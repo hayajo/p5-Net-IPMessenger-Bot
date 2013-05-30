@@ -10,6 +10,7 @@ my $bot = Net::IPMessenger::Bot->new(
         GroupName => 'bot',
         UserName  => 'system_bot',
         HostName  => Sys::Hostname::hostname(),
+        Debug     => 1,
     },
     on_message => [
         qr/top/ => sub { `top -b -n 1` },

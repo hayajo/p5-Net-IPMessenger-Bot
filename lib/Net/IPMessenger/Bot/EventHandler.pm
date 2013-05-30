@@ -5,6 +5,9 @@ use warnings;
 
 use parent qw/Net::IPMessenger::RecvEventHandler/;
 use Encode qw();
+use IO::Socket;
+use Term::ANSIColor qw(:constants);
+$Term::ANSIColor::AUTORESET = 1;
 
 sub new {
     my ($class, %args) = @_;
@@ -17,6 +20,18 @@ sub new {
         : [ qr// => $args{handler} ];
 
     return $self;
+}
+
+sub debug {
+    my ( $self, $them, $user ) = @_;
+
+    my $peeraddr = inet_ntoa( $them->socket->peeraddr );
+    my $peerport = $them->socket->peerport;
+    my $command  = $them->messagecommand( $user->command );
+    my $modename = $command->modename;
+
+    print CYAN "Received $modename from [$peeraddr:$peerport]";
+    print RESET "\n";
 }
 
 sub handle {

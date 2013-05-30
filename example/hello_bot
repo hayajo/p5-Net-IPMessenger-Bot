@@ -10,6 +10,7 @@ my $bot = Net::IPMessenger::Bot->new(
         GroupName => 'bot',
         UserName  => 'hello_bot',
         HostName  => Sys::Hostname::hostname(),
+        Debug     => 1,
     },
     # on_message => sub {
         # my $user = shift;
