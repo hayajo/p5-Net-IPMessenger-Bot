@@ -61,16 +61,23 @@ sub SENDMSG {
     $ipmsg->message([]); #  clear cached-messages
     $self->SUPER::SENDMSG($ipmsg, $user);
 
-    my $res = $self->handle($user);
+    if ( $command->get_readcheck() ) {
+        $ipmsg->send(
+            {
+                command => $ipmsg->messagecommand('READMSG'),
+                option  => $user->packet_num,
+            }
+        );
+    }
 
-    $ipmsg->send(
-        {
-            command  => $ipmsg->messagecommand('SENDMSG'),
-            peeraddr => $user->peeraddr,
-            peerport => $user->peerport,
-            option   => Encode::encode( 'shiftjis', $res ),
-        }
-    ) if ( defined $res );
+    if ( my $res = $self->handle($user) ) {
+        $ipmsg->send(
+            {
+                command => $ipmsg->messagecommand('SENDMSG'),
+                option  => Encode::encode( 'shiftjis', $res ),
+            }
+        );
+    }
 }
 
 1;
