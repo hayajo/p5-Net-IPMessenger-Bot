@@ -82,6 +82,26 @@ subtest 'arreyref' => sub {
     like $recv->get_message, qr/Unsupported Command: command/;
 };
 
+subtest 'readcheck' => sub {
+    my $port = empty_port();
+    my $bot  = generate_bot(
+        port    => $port,
+        handler => sub {},
+    );
+
+    my $user = generate_user();
+    sendmsg(
+        $user => 'hello',
+        { peerport => $port, readcheck => 1 },
+    );
+    $bot->{ipmsg}->recv();
+
+    my $recv = $user->recv();
+    ok $recv;
+    my $cmd = $user->messagecommand( $recv->command );
+    is $cmd->modename, 'READMSG';
+};
+
 sub generate_bot {
     my %args = @_;
 
@@ -113,6 +133,7 @@ sub sendmsg {
     $args ||= {};
 
     my $cmd = $ipmsg->messagecommand('SENDMSG');
+    $cmd->set_readcheck() if ( $args->{readcheck} );
     $ipmsg->send(
         {
             command  => $cmd,
