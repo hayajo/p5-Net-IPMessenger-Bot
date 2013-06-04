@@ -3,7 +3,7 @@ package Net::IPMessenger::Bot::EventHandler;
 use strict;
 use warnings;
 
-use parent qw/Net::IPMessenger::RecvEventHandler/;
+use base qw/Net::IPMessenger::RecvEventHandler/;
 use Encode qw();
 use IO::Socket;
 use Term::ANSIColor qw(:constants);
