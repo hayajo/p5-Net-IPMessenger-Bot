@@ -1,6 +1,8 @@
 Revision history for Net-IPMessenger-Bot
 
 {{$NEXT}}
+
+0.05  2013-06-05 09:10:10 JST
         - Changed to use 'base' from 'parent'
 
 0.04  2013-05-30 11:58:54 JST
